@@ -35,7 +35,7 @@ namespace Application.Services
         {
             var sb = new StringBuilder();
 
-            var wholeNumberPart = (Int64)Decimal.Truncate(number);
+            var wholeNumberPart = (long)Decimal.Truncate(number);
             var decimalPart = number - wholeNumberPart;
             if (wholeNumberPart < 0)
             {
@@ -80,7 +80,7 @@ namespace Application.Services
             return sb.ToString().Trim();
         }
 
-        private string WholeNumberToEnglish(Int64 number, bool firstCall = false)
+        private string WholeNumberToEnglish(long number, bool firstCall = false)
         {
             // TODO: a bit of DRY in here checking remainders, be nice to tidy it up
 
@@ -160,9 +160,8 @@ namespace Application.Services
             {
                 sb.Append(this.tensMap[(int)(number / 10)]);
                 var remainder = number % 10;
-                
-                // WARNING: throwing away less than 1 here for simplicity!
-                if (remainder < 1)
+
+                if (remainder == 0)
                 {
                     return sb.ToString();
                 }

@@ -1,5 +1,7 @@
 ﻿# FS Assignment
 
+[![Build Status](https://nizmow.visualstudio.com/FS%20Assignment/_apis/build/status/Build?branchName=master)](https://nizmow.visualstudio.com/FS%20Assignment/_build/latest?definitionId=5&branchName=master)
+
 ## Summary
 
 This exciting application can take a numerical input and respond with the equivalent English text! Impress your friends by demonstrating that you can say numbers -- this program will tell you how.

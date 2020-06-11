@@ -35,3 +35,9 @@ body {
         display: none;
     }
 }
+
+/* nicer validation */
+.field-validation-error {
+    color:red;
+    font-size: smaller; 
+}

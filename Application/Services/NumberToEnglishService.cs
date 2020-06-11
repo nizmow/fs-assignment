@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Application.Services
 {
-    public class NumberToEnglishService
+    public class NumberToEnglishService : INumberToEnglishService
     {
         private readonly string[] numbersBelowTwentyMap;
         private readonly Dictionary<int, string> tensMap;
@@ -31,7 +32,12 @@ namespace Application.Services
             };
         }
 
-        public string NumberToEnglish(decimal number)
+        public Task<string> CalculateEnglishAndLog(decimal number)
+        {
+            return Task.FromResult(this.CalculateEnglish(number));
+        }
+
+        public string CalculateEnglish(decimal number)
         {
             var sb = new StringBuilder();
 
@@ -80,15 +86,26 @@ namespace Application.Services
             return sb.ToString().Trim();
         }
 
+        /// <summary>
+        /// This function uses recursion to convert a whole number to English.
+        /// </summary>
+        /// <param name="number">Whole number, positive or negative, to convert</param>
+        /// <param name="firstCall">Is this the first call or not?</param>
+        /// <returns>English representation of number, eg: "twenty two"</returns>
+        /// <remarks>
+        /// I don't like this firstCall flag here, but we need it to decide whether to output zero or not. The English
+        /// language isn't particularly well designed.
+        /// </remarks>
         private string WholeNumberToEnglish(long number, bool firstCall = false)
         {
             // TODO: a bit of DRY in here checking remainders, be nice to tidy it up
 
             var sb = new StringBuilder();
 
+            // take off the billions
             if (number >= 1000000000)
             {
-                sb.Append($"{this.NumberToEnglish(number / 1000000000)} billion");
+                sb.Append($"{this.WholeNumberToEnglish(number / 1000000000)} billion");
                 var remainder = number % 1000000000;
                 if (remainder == 0)
                 {
@@ -100,10 +117,11 @@ namespace Application.Services
                     sb.Append(" and");
                 }
 
-                sb.Append($" {this.NumberToEnglish(remainder)}");
+                sb.Append($" {this.WholeNumberToEnglish(remainder)}");
                 return sb.ToString();
             }
 
+            // take off the millions
             if (number / 1000000 >= 1)
             {
                 sb.Append($"{this.WholeNumberToEnglish(number / 1000000)} million");
@@ -122,6 +140,7 @@ namespace Application.Services
                 return sb.ToString();
             }
 
+            // take off the thousands
             if (number / 1000 >= 1)
             {
                 sb.Append($"{this.WholeNumberToEnglish(number / 1000)} thousand");
@@ -141,6 +160,7 @@ namespace Application.Services
                 return sb.ToString();
             }
 
+            // take off the hundreds
             if (number / 100 >= 1)
             {
                 sb.Append($"{this.WholeNumberToEnglish(number / 100)} hundred");
@@ -156,6 +176,7 @@ namespace Application.Services
                 return sb.ToString();
             }
 
+            // deal with 20 and over
             if (number / 10 >= 2)
             {
                 sb.Append(this.tensMap[(int)(number / 10)]);
@@ -169,6 +190,7 @@ namespace Application.Services
                 sb.Append($" {this.WholeNumberToEnglish(number % 10)}");
             }
 
+            // deal with less than 20
             if (number < 20)
             {
                 if (!firstCall && number == 0)

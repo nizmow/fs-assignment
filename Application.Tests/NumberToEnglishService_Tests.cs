@@ -24,11 +24,11 @@ namespace Application.Tests
         [InlineData(7836197, "seven million eight hundred and thirty six thousand one hundred and ninety seven")]
         [InlineData(256000000, "two hundred and fifty six million")]
         [InlineData(83013123001, "eighty three billion thirteen million one hundred and twenty three thousand and one")]
-        public void NumberToInput_WithValidNumber_Succeeds(decimal input, string expectedResult)
+        public void CalculateEnglish_WithValidNumber_Succeeds(decimal input, string expectedResult)
         {
             var target = new NumberToEnglishService();
 
-            var result = target.NumberToEnglish(input);
+            var result = target.CalculateEnglish(input);
 
             result.Should().Be(expectedResult);
         }

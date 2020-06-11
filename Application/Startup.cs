@@ -1,4 +1,5 @@
-﻿using DataAccess;
+﻿using Application.Services;
+using DataAccess;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -33,6 +34,8 @@ namespace Application
             services.AddDbContext<FsAssignmentContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("FsAssignment")));
+
+            services.AddScoped<INumberToEnglishService, NumberToEnglishService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
